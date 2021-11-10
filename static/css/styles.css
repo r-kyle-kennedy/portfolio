@@ -19,8 +19,8 @@ FONT
     color: var(--primary-text);
 }
 
-p, 
-li, 
+p,
+li,
 a {
     font-size: 20px;
 }
@@ -175,7 +175,7 @@ About
     left: 5px;
 }
 
-#about  h2, 
+#about  h2,
 #about p {
     color: var(--white);
     margin: auto;
