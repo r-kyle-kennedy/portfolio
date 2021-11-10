@@ -15,7 +15,7 @@ def format_date(date_str):
 def edit_project(project, repo):
     project.date = format_date(repo['updated_at'])
     project.description = repo['description']
-    project.skills = ','.join(repo['topics'])
+    project.skills = ', '.join(repo['topics'])
     project.url = repo['html_url']
 
 
@@ -27,7 +27,7 @@ def add_github_api(data):
             new_project = Project(title = repo['name'],
                         date = format_date(repo['updated_at']),
                         description = repo['description'],
-                        skills = ','.join(repo['topics']),
+                        skills = ', '.join(repo['topics']),
                         url = repo['html_url'])
             db.session.add(new_project)
         else:
@@ -38,7 +38,8 @@ def add_github_api(data):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    projects = Project.query.all()
+    return render_template('index.html', projects=projects)
 
 
 if __name__ == '__main__':
@@ -47,4 +48,4 @@ if __name__ == '__main__':
     response = urlopen(url)
     data = json.loads(response.read())
     add_github_api(data)
-    # app.run(debug=True, port=8000, host='0.0.0.0')
+    app.run(debug=True, port=8000, host='0.0.0.0')
