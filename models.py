@@ -14,6 +14,7 @@ class Project(db.Model):
     description = db.Column('Description', db.Text)
     skills = db.Column('Skills', db.Text)
     url = db.Column('URL', db.Text)
+    gh_id = db.Column('GitHub Repo ID', db.Integer)
 
 
     def __repr__(self):

@@ -13,6 +13,7 @@ def format_date(date_str):
 
 
 def edit_project(project, repo):
+    project.title = repo['name']
     project.date = format_date(repo['updated_at'])
     project.description = repo['description']
     project.skills = ', '.join(repo['topics'])
@@ -22,16 +23,17 @@ def edit_project(project, repo):
 
 def add_github_api(data):
     for repo in data:
-        project_in_db = db.session.query(Project).filter(Project.title==repo['name']).one_or_none()
+        project_in_db = db.session.query(Project).filter(Project.gh_id==repo['id']).one_or_none()
         if not project_in_db:
             new_project = Project(title = repo['name'],
                         date = format_date(repo['updated_at']),
                         description = repo['description'],
                         skills = ', '.join(repo['topics']),
-                        url = repo['html_url'])
+                        url = repo['html_url'],
+                        gh_id = repo['id'])
             db.session.add(new_project)
         else:
-            project = db.session.query(Project).filter(Project.title==repo['name']).first()
+            project = db.session.query(Project).filter(Project.gh_id==repo['id']).first()
             edit_project(project, repo)
     db.session.commit()
 
