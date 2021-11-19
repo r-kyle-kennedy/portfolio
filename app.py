@@ -44,6 +44,13 @@ def index():
     return render_template('index.html', projects=projects)
 
 
+@app.route('/projects/<id>')
+def project(id):
+    projects = Project.query.all()
+    project = Project.query.get_or_404(id)
+    return render_template('detail.html', project=project, projects=projects)
+
+
 if __name__ == '__main__':
     db.create_all()
     url = "https://api.github.com/users/r-kyle-kennedy/repos"
