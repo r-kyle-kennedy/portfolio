@@ -80,7 +80,7 @@ def add_project():
                         url=request.form['github'], gh_id = request.form['gh_id'])
         db.session.add(new_project)
         db.session.commit()
-        return redirect(url_for('index'))
+        return redirect(url_for('project', id=new_project.id))
     return render_template('projectform.html', projects=projects)
 
 
