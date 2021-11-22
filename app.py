@@ -21,21 +21,27 @@ def edit_project(project, repo):
 
 
 
-def add_github_api(data):
-    for repo in data:
-        project_in_db = db.session.query(Project).filter(Project.gh_id==repo['id']).one_or_none()
-        if not project_in_db:
-            new_project = Project(title = repo['name'],
-                        date = format_date(repo['updated_at']),
-                        description = repo['description'],
-                        skills = ', '.join(repo['topics']),
-                        url = repo['html_url'],
-                        gh_id = repo['id'])
-            db.session.add(new_project)
-        else:
-            project = db.session.query(Project).filter(Project.gh_id==repo['id']).first()
-            edit_project(project, repo)
-    db.session.commit()
+def add_github_api():
+    try:
+        url = "https://api.github.com/users/r-kyle-kennedy/repos"
+        response = urlopen(url)
+        data = json.loads(response.read())
+        for repo in data:
+            project_in_db = db.session.query(Project).filter(Project.gh_id==repo['id']).one_or_none()
+            if not project_in_db:
+                new_project = Project(title = repo['name'],
+                date = format_date(repo['updated_at']),
+                description = repo['description'],
+                skills = ', '.join(repo['topics']),
+                url = repo['html_url'],
+                gh_id = repo['id'])
+                db.session.add(new_project)
+            else:
+                project = db.session.query(Project).filter(Project.gh_id==repo['id']).first()
+                edit_project(project, repo)
+        db.session.commit()
+    except Exception as e:
+        print(e)
 
 
 @app.route('/')
@@ -51,10 +57,13 @@ def project(id):
     return render_template('detail.html', project=project, projects=projects)
 
 
+@app.route('/projects/update/<id>')
+def update(id):
+    add_github_api()
+    return redirect(url_for('project', id=id))
+
+
 if __name__ == '__main__':
     db.create_all()
-    url = "https://api.github.com/users/r-kyle-kennedy/repos"
-    response = urlopen(url)
-    data = json.loads(response.read())
-    add_github_api(data)
+    add_github_api()
     app.run(debug=True, port=8000, host='0.0.0.0')

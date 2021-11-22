@@ -405,6 +405,8 @@ Buttons - Detail
     padding-top: 4rem;
     padding-bottom: 4rem;
     text-align: center;
+    display: flex;
+    justify-content: space-around;
 }
 
 #edit-delete a {
@@ -415,9 +417,9 @@ Buttons - Detail
     text-decoration: none;
 }
 
-#edit-delete a:first-of-type  {
+/* #edit-delete a:first-of-type  {
     margin-right: 20px;
-}
+} */
 
 #edit-delete a i {
     color: var(--white);
@@ -671,9 +673,9 @@ Media Queries
         max-width: 500px;
     }
 
-    #edit-delete a:first-of-type  {
-        margin-right: 200px;
-    }
+    /* #edit-delete a:first-of-type  { */
+        /* margin-right: 200px;
+    } */
 
     #form input,
     #form textarea {
