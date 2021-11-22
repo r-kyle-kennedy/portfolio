@@ -63,6 +63,27 @@ def update(id):
     return redirect(url_for('project', id=id))
 
 
+@app.route('/delete/<id>')
+def delete(id):
+    project = Project.query.get_or_404(id)
+    db.session.delete(project)
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
+@app.route('/add-project', methods=['GET', 'POST'])
+def add_project():
+    projects = Project.query.all()
+    if request.form:
+        new_project = Project(title=request.form['title'], date=datetime.datetime.strptime(request.form['date'], "%Y-%m"),
+                        description=request.form['desc'], skills=request.form['skills'],
+                        url=request.form['github'], gh_id = request.form['gh_id'])
+        db.session.add(new_project)
+        db.session.commit()
+        return redirect(url_for('index'))
+    return render_template('projectform.html', projects=projects)
+
+
 if __name__ == '__main__':
     db.create_all()
     add_github_api()
