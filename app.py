@@ -12,13 +12,12 @@ def format_date(date_str):
     return date
 
 
-def edit_project(project, repo):
+def edit_project_from_gh(project, repo):
     project.title = repo['name']
     project.date = format_date(repo['updated_at'])
     project.description = repo['description']
     project.skills = ', '.join(repo['topics'])
     project.url = repo['html_url']
-
 
 
 def add_github_api():
@@ -38,7 +37,7 @@ def add_github_api():
                 db.session.add(new_project)
             else:
                 project = db.session.query(Project).filter(Project.gh_id==repo['id']).first()
-                edit_project(project, repo)
+                edit_project_from_gh(project, repo)
         db.session.commit()
     except Exception as e:
         print(e)
@@ -87,7 +86,7 @@ def delete(id):
     return redirect(url_for('index'))
 
 
-@app.route('/add-project', methods=['GET', 'POST'])
+@app.route('/project/new', methods=['GET', 'POST'])
 def add_project():
     projects = Project.query.all()
     if request.form:
@@ -99,6 +98,11 @@ def add_project():
         return redirect(url_for('project', id=new_project.id))
     return render_template('projectform.html', projects=projects)
 
+
+@app.route('/about')
+def about():
+    projects = Project.query.all()
+    return render_template('about.html', projects=projects)
 
 if __name__ == '__main__':
     db.create_all()
