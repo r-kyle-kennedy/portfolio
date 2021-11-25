@@ -104,6 +104,12 @@ def about():
     projects = Project.query.all()
     return render_template('about.html', projects=projects)
 
+
+@app.errorhandler(404)
+def not_found(error):
+    return render_template('404.html', msg=error), 404
+
+
 if __name__ == '__main__':
     db.create_all()
     add_github_api()
