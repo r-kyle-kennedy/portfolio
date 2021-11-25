@@ -25,12 +25,12 @@
       <div id="triangle6"></div>
   </section>
   <section id="edit-delete">
-      <a href="#">
+      <a href="{{url_for('edit_project', id=project.id)}}">
           <i class="fas fa-edit"></i>
           Edit
       </a>
       <a href="{{url_for('update', id=project.id)}}">
-          <i class="fas fa-edit"></i>
+          <i class="fab fa-github"></i>
           Update From Github
       </a>
       <a href="{{url_for('delete', id=project.id)}}">

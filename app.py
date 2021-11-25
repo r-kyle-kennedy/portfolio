@@ -50,11 +50,27 @@ def index():
     return render_template('index.html', projects=projects)
 
 
-@app.route('/projects/<id>')
+@app.route('/project/<id>')
 def project(id):
     projects = Project.query.all()
     project = Project.query.get_or_404(id)
     return render_template('detail.html', project=project, projects=projects)
+
+
+@app.route('/project/<id>/edit', methods=['GET', 'POST'])
+def edit_project(id):
+    projects = Project.query.all()
+    project = Project.query.get_or_404(id)
+    if request.form:
+        project.title=request.form['title']
+        project.date=datetime.datetime.strptime(request.form['date'], "%Y-%m")
+        project.description=request.form['desc']
+        project.skills=request.form['skills']
+        project.url=request.form['github']
+        project.gh_id = request.form['gh_id']
+        db.session.commit()
+        return redirect(url_for('project', id=project.id))
+    return render_template('projecteditform.html', project=project, projects=projects)
 
 
 @app.route('/projects/update/<id>')
