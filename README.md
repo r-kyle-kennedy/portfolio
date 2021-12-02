@@ -16,4 +16,4 @@ This project helped me to really understand the fundamentals of creating, updati
 Using the provided templates and using flask to wire everything together allowed me to gain a firm understanding of how Flask works and how I could use it to add my own stretch goals.
 
 
-## To see a live version of this site please visit: [http://rkylekennedy.pythonanywhere.com/]
+## To see a live version of this site please visit: http://rkylekennedy.pythonanywhere.com/
