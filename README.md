@@ -1,7 +1,7 @@
 # Portfolio
 Portfolio website using flask and a SQLAlchemy database.
 
-The database is created using github's user api. In order for the site to pull the correct information change the url found in app.py. The database is built using each public repo's name, date, descripion, topics, and url.
+The database is created using Github's user API. In order for the site to pull the correct information change the URL found in app.py. The database is built using each public repo's name, date, description, topics, and URL.
 
 ## To run this site locally:
 1. Clone the repo
