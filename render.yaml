@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: portfolio-flask-app
+    env: python
+    pythonVersion: 3.11
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn wsgi:application
+    envVars:
+      - key: PORTFOLIO_ADMIN_USERNAME
+        value: youradmin
+        generateValue: false
+      - key: PORTFOLIO_ADMIN_PASSWORD
+        value: yourpassword
+        generateValue: false
+      - key: PORTFOLIO_SECRET_KEY
+        value: your-long-random-secret-value
+        generateValue: false
+      - key: FLASK_DEBUG
+        value: false
+        generateValue: false

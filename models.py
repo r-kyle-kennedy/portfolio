@@ -1,10 +1,19 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import datetime
+import os
 
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///projects.db'
+# Use DATABASE_URL env var (e.g. Postgres on Render) with a sqlite fallback for local dev
+database_url = os.environ.get('DATABASE_URL', 'sqlite:///projects.db')
+# Normalize old-style Heroku URLs
+if database_url.startswith('postgres://'):
+    database_url = database_url.replace('postgres://', 'postgresql://', 1)
+if database_url.startswith('postgresql://'):
+    database_url = database_url.replace('postgresql://', 'postgresql+psycopg://', 1)
+app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db = SQLAlchemy(app)
 
 class Project(db.Model):

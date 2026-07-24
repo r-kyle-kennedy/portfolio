@@ -19,6 +19,64 @@ PORTFOLIO_ADMIN_PASSWORD=yourpassword
 PORTFOLIO_SECRET_KEY=your-long-random-secret-value
 ```
 
+## Deploying to PythonAnywhere
+1. Upload this project to your PythonAnywhere account.
+2. In the PythonAnywhere Web tab, configure your virtualenv and static file paths.
+3. Set the WSGI configuration file to import `application` from `wsgi.py`.
+4. Add environment variables in the PythonAnywhere Web tab, or keep them in `.env` if your app loads it.
+5. Make sure `DEBUG` is disabled in production.
+
+If you use the PythonAnywhere WSGI file, set the source to:
+
+```python
+from app import app as application
+```
+
+Then reload the web app.
+
+## Deploying to Render
+A `render.yaml` file is included for Render deployment. It installs dependencies with `pip install -r requirements.txt` and starts the app with:
+
+```bash
+gunicorn wsgi:application
+```
+
+Make sure the Render environment variables are set for:
+- `PORTFOLIO_ADMIN_USERNAME`
+- `PORTFOLIO_ADMIN_PASSWORD`
+- `PORTFOLIO_SECRET_KEY`
+- `FLASK_DEBUG=false`
+
+### Populating the database
+If your live site shows no projects it may be because the database is empty. You have two options:
+
+- Run the GitHub sync once manually on the host using the helper script:
+
+```bash
+python populate_db.py
+```
+
+- Or enable automatic sync at startup by setting the environment variable `AUTO_SYNC_GITHUB=true` in your hosting provider. This will call the GitHub API and insert/update projects whenever the app starts.
+
+Note: If you're switching from the local `projects.db` (SQLite) to a managed Postgres (`DATABASE_URL`), migrate existing data first if you want to preserve it.
+
+## Persistent database (Render / production)
+Render's filesystem is ephemeral — any files written by the app (including `projects.db`) will be lost on redeploys or instance restarts. To persist data across deploys use a managed database (Postgres) and set the `DATABASE_URL` environment variable in Render.
+
+This project uses `psycopg` (psycopg3), so Render's `DATABASE_URL` should be a normal Postgres URL such as `postgres://...` or `postgresql://...`. The app will normalize that to the `postgresql+psycopg://` SQLAlchemy dialect at runtime.
+
+Steps:
+
+1. Create a managed Postgres database in Render (or another provider).
+2. Set the `DATABASE_URL` environment variable in the Render dashboard to the connection string provided by the database (e.g. `postgres://...`).
+3. Deploy the app. On startup the application will use `DATABASE_URL` and create tables automatically. If you prefer to create tables manually, run the helper script:
+
+```bash
+python create_db.py
+```
+
+4. If you currently use `projects.db` locally, consider migrating the data separately before switching.
+
 ## Running tests:
 1. Activate the virtual environment.
 2. Install developer dependencies with `pip install -r requirements-dev.txt`.
