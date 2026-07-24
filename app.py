@@ -14,6 +14,9 @@ ADMIN_PASSWORD = os.environ.get("PORTFOLIO_ADMIN_PASSWORD")
 app.secret_key = os.environ.get("PORTFOLIO_SECRET_KEY") or "dev-secret-key"
 app.config['DEBUG'] = os.environ.get("FLASK_DEBUG", "false").lower() in ("1", "true", "yes")
 
+with app.app_context():
+    db.create_all()
+
 
 def format_date(date_str):
     date = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
