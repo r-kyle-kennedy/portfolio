@@ -63,6 +63,8 @@ Note: If you're switching from the local `projects.db` (SQLite) to a managed Pos
 ## Persistent database (Render / production)
 Render's filesystem is ephemeral — any files written by the app (including `projects.db`) will be lost on redeploys or instance restarts. To persist data across deploys use a managed database (Postgres) and set the `DATABASE_URL` environment variable in Render.
 
+This project uses `psycopg` (psycopg3), so Render's `DATABASE_URL` should be a normal Postgres URL such as `postgres://...` or `postgresql://...`. The app will normalize that to the `postgresql+psycopg://` SQLAlchemy dialect at runtime.
+
 Steps:
 
 1. Create a managed Postgres database in Render (or another provider).
