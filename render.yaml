@@ -2,6 +2,7 @@ services:
   - type: web
     name: portfolio-flask-app
     env: python
+    pythonVersion: 3.11
     plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn wsgi:application
