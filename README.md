@@ -10,6 +10,15 @@ The database is created using Github's user API. In order for the site to pull t
 4. Once inside the virtual environment use `pip install -r requirements.txt` to install the necessary python packages.
 5. After the install finishes, run the server using `python app.py` and then ctrl+click on the url that loads in the terminal.
 
+## Environment variables
+Create a `.env` file with your admin credentials and secret key:
+
+```env
+PORTFOLIO_ADMIN_USERNAME=youradmin
+PORTFOLIO_ADMIN_PASSWORD=yourpassword
+PORTFOLIO_SECRET_KEY=your-long-random-secret-value
+```
+
 ## Running tests:
 1. Activate the virtual environment.
 2. Install developer dependencies with `pip install -r requirements-dev.txt`.
