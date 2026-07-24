@@ -1,0 +1,19 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+  <section class="header">
+      <h1>Admin Login</h1>
+      <p>Sign in to add, edit, or delete projects.</p>
+  </section>
+  <section id="form">
+      <form action="{{url_for('login')}}" method="POST">
+          <label for="username">Username</label>
+          <input type="text" name="username" id="username" required>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required>
+          <div>
+              <button type="submit">Login</button>
+          </div>
+      </form>
+  </section>
+{% endblock %}

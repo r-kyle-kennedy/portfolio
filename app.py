@@ -1,15 +1,25 @@
 from flask import (render_template, redirect,
-                    url_for, request)
+                    url_for, request, session)
 from urllib.request import urlopen
 import json
 import datetime
-
+import os
+from dotenv import load_dotenv
 from models import db, Project, app
+
+load_dotenv()
+
+ADMIN_USERNAME = os.environ.get("PORTFOLIO_ADMIN_USERNAME")
+ADMIN_PASSWORD = os.environ.get("PORTFOLIO_ADMIN_PASSWORD")
 
 
 def format_date(date_str):
     date = datetime.datetime.strptime(date_str, "%Y-%m-%dT%H:%M:%SZ")
     return date
+
+
+def require_admin():
+    return session.get("is_admin", False)
 
 
 def edit_project_from_gh(project, repo):
@@ -49,6 +59,23 @@ def index():
     return render_template('index.html', projects=projects)
 
 
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    projects = Project.query.all()
+    if request.method == 'POST':
+        if request.form.get('username') == ADMIN_USERNAME and request.form.get('password') == ADMIN_PASSWORD:
+            session['is_admin'] = True
+            return redirect(url_for('index'))
+    session.pop('is_admin', None)
+    return render_template('login.html', projects=projects)
+
+
+@app.route('/logout')
+def logout():
+    session.pop('is_admin', None)
+    return redirect(url_for('index'))
+
+
 @app.route('/project/<id>')
 def project(id):
     projects = Project.query.all()
@@ -58,6 +85,9 @@ def project(id):
 
 @app.route('/project/<id>/edit', methods=['GET', 'POST'])
 def edit_project(id):
+    if not require_admin():
+        return redirect(url_for('login'))
+
     projects = Project.query.all()
     project = Project.query.get_or_404(id)
     if request.form:
@@ -74,12 +104,18 @@ def edit_project(id):
 
 @app.route('/projects/update/<id>')
 def update(id):
+    if not require_admin():
+        return redirect(url_for('login'))
+
     add_github_api()
     return redirect(url_for('project', id=id))
 
 
 @app.route('/delete/<id>')
 def delete(id):
+    if not require_admin():
+        return redirect(url_for('login'))
+
     project = Project.query.get_or_404(id)
     db.session.delete(project)
     db.session.commit()
@@ -88,6 +124,9 @@ def delete(id):
 
 @app.route('/project/new', methods=['GET', 'POST'])
 def add_project():
+    if not require_admin():
+        return redirect(url_for('login'))
+
     projects = Project.query.all()
     if request.form:
         new_project = Project(title=request.form['title'], date=datetime.datetime.strptime(request.form['date'], "%Y-%m"),

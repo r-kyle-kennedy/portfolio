@@ -34,6 +34,8 @@
                         Projects
                       </a>
                       <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/#projects">All Projects</a></li>
+                        
                         {% for project in projects %}
                           <li><a class="dropdown-item" href="{{url_for('project', id=project.id)}}">{{project.title}}</a></li>
                         {% endfor %}
@@ -42,8 +44,17 @@
                     <li class="nav-item">
                       <a class="nav-link" href="#contact">Contact</a>
                     </li>
+                    {% if session.get('is_admin') %}
                     <li class="nav-item">
                       <a class="nav-link" href="{{url_for('add_project')}}">Add Project</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                      {% if session.get('is_admin') %}
+                      <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+                      {% else %}
+                      <a class="nav-link" href="{{url_for('login')}}">Login</a>
+                      {% endif %}
                     </li>
                   </ul>
                 </div>
