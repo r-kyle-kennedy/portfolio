@@ -11,7 +11,7 @@ load_dotenv()
 
 ADMIN_USERNAME = os.environ.get("PORTFOLIO_ADMIN_USERNAME")
 ADMIN_PASSWORD = os.environ.get("PORTFOLIO_ADMIN_PASSWORD")
-app.secret_key = os.environ.get("PORTFOLIO_SECRET_KEY") or "dev-secret-key"
+app.secret_key = os.environ.get("PORTFOLIO_SECRET_KEY")
 app.config['DEBUG'] = os.environ.get("FLASK_DEBUG", "false").lower() in ("1", "true", "yes")
 
 with app.app_context():
