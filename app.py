@@ -11,7 +11,8 @@ load_dotenv()
 
 ADMIN_USERNAME = os.environ.get("PORTFOLIO_ADMIN_USERNAME")
 ADMIN_PASSWORD = os.environ.get("PORTFOLIO_ADMIN_PASSWORD")
-app.secret_key = os.environ.get("PORTFOLIO_SECRET_KEY")
+app.secret_key = os.environ.get("PORTFOLIO_SECRET_KEY") or "dev-secret-key"
+app.config['DEBUG'] = os.environ.get("FLASK_DEBUG", "false").lower() in ("1", "true", "yes")
 
 
 def format_date(date_str):

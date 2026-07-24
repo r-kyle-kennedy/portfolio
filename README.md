@@ -19,6 +19,21 @@ PORTFOLIO_ADMIN_PASSWORD=yourpassword
 PORTFOLIO_SECRET_KEY=your-long-random-secret-value
 ```
 
+## Deploying to PythonAnywhere
+1. Upload this project to your PythonAnywhere account.
+2. In the PythonAnywhere Web tab, configure your virtualenv and static file paths.
+3. Set the WSGI configuration file to import `application` from `wsgi.py`.
+4. Add environment variables in the PythonAnywhere Web tab, or keep them in `.env` if your app loads it.
+5. Make sure `DEBUG` is disabled in production.
+
+If you use the PythonAnywhere WSGI file, set the source to:
+
+```python
+from app import app as application
+```
+
+Then reload the web app.
+
 ## Running tests:
 1. Activate the virtual environment.
 2. Install developer dependencies with `pip install -r requirements-dev.txt`.
