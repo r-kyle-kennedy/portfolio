@@ -47,6 +47,21 @@ Make sure the Render environment variables are set for:
 - `PORTFOLIO_SECRET_KEY`
 - `FLASK_DEBUG=false`
 
+## Persistent database (Render / production)
+Render's filesystem is ephemeral — any files written by the app (including `projects.db`) will be lost on redeploys or instance restarts. To persist data across deploys use a managed database (Postgres) and set the `DATABASE_URL` environment variable in Render.
+
+Steps:
+
+1. Create a managed Postgres database in Render (or another provider).
+2. Set the `DATABASE_URL` environment variable in the Render dashboard to the connection string provided by the database (e.g. `postgres://...`).
+3. Deploy the app. On startup the application will use `DATABASE_URL` and create tables automatically. If you prefer to create tables manually, run the helper script:
+
+```bash
+python create_db.py
+```
+
+4. If you currently use `projects.db` locally, consider migrating the data separately before switching.
+
 ## Running tests:
 1. Activate the virtual environment.
 2. Install developer dependencies with `pip install -r requirements-dev.txt`.
