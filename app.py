@@ -153,8 +153,16 @@ def about():
 def not_found(error):
     return render_template('404.html', msg=error), 404
 
+# Optional: auto-sync GitHub repos on import when enabled via environment variable
+if os.environ.get('AUTO_SYNC_GITHUB', 'false').lower() in ('1', 'true', 'yes'):
+    with app.app_context():
+        try:
+            add_github_api()
+        except Exception as e:
+            print('AUTO_SYNC_GITHUB failed:', e)
+
 
 if __name__ == '__main__':
     db.create_all()
     add_github_api()
-    app.run(debug=True, port=8000, host='0.0.0.0')
+    app.run(debug=app.config.get('DEBUG', False), port=8000, host='0.0.0.0')

@@ -47,6 +47,19 @@ Make sure the Render environment variables are set for:
 - `PORTFOLIO_SECRET_KEY`
 - `FLASK_DEBUG=false`
 
+### Populating the database
+If your live site shows no projects it may be because the database is empty. You have two options:
+
+- Run the GitHub sync once manually on the host using the helper script:
+
+```bash
+python populate_db.py
+```
+
+- Or enable automatic sync at startup by setting the environment variable `AUTO_SYNC_GITHUB=true` in your hosting provider. This will call the GitHub API and insert/update projects whenever the app starts.
+
+Note: If you're switching from the local `projects.db` (SQLite) to a managed Postgres (`DATABASE_URL`), migrate existing data first if you want to preserve it.
+
 ## Persistent database (Render / production)
 Render's filesystem is ephemeral — any files written by the app (including `projects.db`) will be lost on redeploys or instance restarts. To persist data across deploys use a managed database (Postgres) and set the `DATABASE_URL` environment variable in Render.
 
