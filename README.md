@@ -34,6 +34,19 @@ from app import app as application
 
 Then reload the web app.
 
+## Deploying to Render
+A `render.yaml` file is included for Render deployment. It installs dependencies with `pip install -r requirements.txt` and starts the app with:
+
+```bash
+gunicorn wsgi:application
+```
+
+Make sure the Render environment variables are set for:
+- `PORTFOLIO_ADMIN_USERNAME`
+- `PORTFOLIO_ADMIN_PASSWORD`
+- `PORTFOLIO_SECRET_KEY`
+- `FLASK_DEBUG=false`
+
 ## Running tests:
 1. Activate the virtual environment.
 2. Install developer dependencies with `pip install -r requirements-dev.txt`.

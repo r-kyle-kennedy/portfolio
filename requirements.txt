@@ -8,3 +8,4 @@ Jinja2==3.0.2
 MarkupSafe==2.0.1
 SQLAlchemy==1.4.26
 Werkzeug==2.0.2
+gunicorn==22.1.0
